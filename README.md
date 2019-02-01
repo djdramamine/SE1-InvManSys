@@ -9,7 +9,7 @@ Inventory Management System
   <div><h5> Scrum Master </h5>
   Nathan</div>
   <div><h5> Development Team </h5>
-  Alicia<br>
+  Alaina<br>
   Cameron<br>
   Justin<br>
   Daniel
