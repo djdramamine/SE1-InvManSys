@@ -9,7 +9,7 @@
   <i>password</i>
  <br><br>
  <i> Note: You do NOT have sudo permissions... <br>
- This is my own hardware please avoid from taking advantage of any security flaws inherent to Pi's
+ This is my own hardware please avoid from taking advantage of any security flaws inherent to Pi's </i>
   <hr>
 <h3> Connecting to the Linux Server </h3>
 I have enabled remote SSH and whitelisted only the user accounts I've created today. The server will be up 24/7, but
