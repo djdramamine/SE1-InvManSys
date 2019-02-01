@@ -11,6 +11,7 @@ Inventory Management System
   <div><h5> Development Team </h5>
   Alicia<br>
   Cameron<br>
+  Justin<br>
   Daniel
   </div>
   <hr>
