@@ -1,4 +1,7 @@
 ### Initial Table Creation Queries
+##### We should keep these updated so we have a reference on how to implement tables for deployment purposes also a reference to use if we don't have access to the database for some reason
+---
+
 #### item_list
 ```
 CREATE TABLE `InvManSys`.`item_list` (
@@ -111,7 +114,8 @@ CREATE TABLE `InvManSys`.`sales_order_header` (
 COMMENT = 'Header information for sales orders	';
 ```   
 #### sales_order_detail
-```CREATE TABLE `InvManSys`.`sales_order_detail` (
+```
+CREATE TABLE `InvManSys`.`sales_order_detail` (
   `line_key` CHAR(3) NOT NULL,
   `item_code` CHAR(8) NOT NULL,
   `name_override` VARCHAR(30) NULL,
@@ -124,9 +128,9 @@ COMMENT = 'Header information for sales orders	';
   PRIMARY KEY (`line_key`));
   ```   
   #### receipt_of_goods_header
-```
+  ```
 CREATE TABLE `InvManSys`.`receipt_of_goods_header` (
-  `receipt of good` CHAR(8) NOT NULL,
+  `receipt_code` CHAR(8) NOT NULL,
   `po_code` CHAR(8) NULL,
   `status` CHAR(1) NULL,
   `vendor_code` CHAR(8) NULL,
@@ -135,5 +139,127 @@ CREATE TABLE `InvManSys`.`receipt_of_goods_header` (
   PRIMARY KEY (`receipt of good`))
 COMMENT = 'Header for ROG after PO has been claimed';
 ```   
+#### receipt_of_goods_detail
+```
+CREATE TABLE `InvManSys`.`receipt_of_goods_detail` (
+  `receipt_code` CHAR(8) NOT NULL,
+  `line_key` CHAR(3) NOT NULL,
+  `lot_code` CHAR(10) NOT NULL,
+  `quantity` INT NOT NULL,
+  `price` DOUBLE NOT NULL DEFAULT 0,
+  `tax_code` CHAR(3) NOT NULL,
+  `tax` DOUBLE NOT NULL DEFAULT 0,
+  `subtotal` DOUBLE NOT NULL DEFAULT 0,
+  `total` DOUBLE NOT NULL DEFAULT 0,
+  PRIMARY KEY (`receipt_code`, `line_key`));
+```   
+#### sale_shipping_header
+```
+CREATE TABLE `InvManSys`.`sale_shipping_header` (
+  `sale_ship_code` CHAR(8) NOT NULL,
+  `so_code` CHAR(8) NOT NULL COMMENT 'Sales Order Code',
+  `cust_code` CHAR(8) NOT NULL,
+  `shipped_quantity` INT NULL,
+  `warehouse_code` CHAR(8) NOT NULL COMMENT 'Which Warehouse is this portion of the order coming from?',
+  PRIMARY KEY (`sale_ship_code`, `warehouse_code`, `so_code`))
+COMMENT = 'Contains header information for SO being Shipped';
+```   
+#### sale_shipping_detail
+```
+CREATE TABLE `InvManSys`.`sale_ship_detail` (
+  `sale_ship_code` CHAR(8) NOT NULL,
+  `line_key` CHAR(3) NOT NULL,
+  `lot_code` CHAR(10) NOT NULL,
+  `shipped_quantity` INT NULL,
+  `shipped_price` DOUBLE NULL,
+  `shipped_tax` DOUBLE NULL,
+  `shipped_total` DOUBLE NULL,
+  PRIMARY KEY (`sale_ship_code`, `line_key`, `lot_code`))
+COMMENT = 'Aggregate details of all shipping jobs';
+```   
+#### transfer_header
+```
+CREATE TABLE `InvManSys`.`transfer_header` (
+  `transfer_code` INT NOT NULL,
+  `quantity` INT NULL,
+  `from_warehouse_code` CHAR(8) NULL,
+  `to_warehouse_code` CHAR(8) NULL,
+  `date` DATE NULL,
+  `time` TIME NULL,
+  PRIMARY KEY (`transfer_code`))
+COMMENT = 'Header information for warehouse transfers';
+```   
+#### transfer_detail
+```
+CREATE TABLE `InvManSys`.`transfer_detail` (
+  `transfer_code` CHAR(8) NOT NULL,
+  `line_key` CHAR(3) NOT NULL,
+  `item_code` CHAR(8) NOT NULL,
+  `lot_code` CHAR(10) NOT NULL,
+  `transfer_quantity` INT NOT NULL,
+  `is_frozen` TINYINT NOT NULL DEFAULT 0,
+  `is_outside` TINYINT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`transfer_code`, `line_key`, `lot_code`))
+COMMENT = 'aggregate details of all transfers';
+```   
+#### tax_table
+```
+CREATE TABLE `InvManSys`.`tax_table` (
+  `tax_code` CHAR(8) NOT NULL,
+  `tax_rate` DOUBLE NOT NULL COMMENT 'Percentage of tax',
+  `tax_name` VARCHAR(30) NOT NULL COMMENT 'Name of tax code',
+  `tax_desc` TEXT COMMENT 'Explanation of tax_code',
+  PRIMARY KEY(`tax_code`))
+COMMENT = 'List of specified tax rates to be added by user as seen fit';
+```   
+#### product_type
+```
+CREATE TABLE `InvManSys`.`product_type` (
+  `type_code` CHAR(4) NOT NULL,
+  `type_name` VARCHAR(30) NULL,
+  `type_desc` TEXT NULL,
+  `default_tax_code` CHAR(8) NULL,
+  PRIMARY KEY (`type_code`))
+COMMENT = 'List of product types';
+```   
+#### country_code
+```
+CREATE TABLE `InvManSys`.`country_code` (
+  `country_code` CHAR(3) NOT NULL,
+  `country_name` VARCHAR(3) NOT NULL,
+  `country_description` TEXT,
+  PRIMARY KEY(`country_code`))
+COMMENT = "List of country specifications on items in storage. Needed for regulation";
+```   
+#### transfer_shipping_header
+```
+CREATE TABLE `InvManSys`.`transfer_shipping_header` (
+  `transfer_ship_code` CHAR(8) NOT NULL,
+  `transfer_code` CHAR(8) NULL,
+  `from_warehouse_code` CHAR(8) NULL,
+  `to_warehouse_code` CHAR(8) NULL,
+  `date` DATE NULL,
+  `time` TIME NULL,
+  PRIMARY KEY (`transfer_ship_code`));
+```   
+#### transfer_shipping_detail
+```
+CREATE TABLE `InvManSys`.`transfer_shipping_detail` (
+  `transfer_ship_code` CHAR(8) NOT NULL,
+  `transfer_code` CHAR(8) NOT NULL,
+  `line_key` VARCHAR(45) NOT NULL,
+  `item_code` VARCHAR(45) NULL,
+  `lot_code` VARCHAR(45) NOT NULL,
+  `transfer_quantity` INT NULL,
+  `is_frozen` TINYINT NULL,
+  PRIMARY KEY (`transfer_ship_code`, `line_key`, `lot_code`, `transfer_code`));
+```   
+####
+
+
+
+
+
+
 
 
