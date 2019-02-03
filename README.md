@@ -7,7 +7,7 @@ Inventory Management System
   <div><h5> Product Owner </h5>
   Clay</div>
   <div><h5> Scrum Master </h5>
-  Nathan</div>
+  Nathan (Panda)</div>
   <div><h5> Development Team </h5>
   Alaina<br>
   Cameron<br>
